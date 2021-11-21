@@ -119,3 +119,5 @@ dist
 
 # others
 bd_diagram.drawio
+postgres_data
+*.yml
