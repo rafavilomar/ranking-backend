@@ -2,8 +2,9 @@
   "name": "ranking-backend",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "src/index.js",
   "scripts": {
+    "start": "node .",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -11,10 +12,13 @@
     "url": "git+https://github.com/rafavilomar/ranking-backend.git"
   },
   "keywords": [],
-  "author": "Rafael Vilomar",
+  "author": "",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/rafavilomar/ranking-backend/issues"
   },
-  "homepage": "https://github.com/rafavilomar/ranking-backend#readme"
+  "homepage": "https://github.com/rafavilomar/ranking-backend#readme",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
 }
