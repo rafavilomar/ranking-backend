@@ -10,7 +10,7 @@ const config = {
     user: process.env.POSTGRES_USER || '',
     password: process.env.POSTGRES_PASS || '',
     database: process.env.POSTGRES_DB || '',
-    port: process.env.POSTGRES_SRV_PORT || ''
+    port: parseInt(process.env.POSTGRES_SRV_PORT) || parseInt("")
   }
 }
 export default config; 
