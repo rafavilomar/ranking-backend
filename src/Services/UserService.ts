@@ -8,7 +8,7 @@ class UserService {
   }
 
   async getAllTeachers() {
-    const response = await this.connection.query("SELECT * FROM teacher;");
+    const response = await this.connection.query("SELECT * FROM teacher");
     return response.rows;
   }
 }
