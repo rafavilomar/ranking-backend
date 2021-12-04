@@ -1,11 +1,18 @@
-import { Client } from "pg";
-import Teacher from "../Models/Teacher";
-import getConnection from "../Libs/postgres";
+import { Pool } from "pg";
+import pool from "../Libs/postgres.pool";
+import SchoolService from "./SchoolService";
+import SubjectService from "./SubjectService";
 
 class TeacherService {
-  connection: Client;
+
+  connection: Pool;
+  schoolService: SchoolService;
+  subjectService: SubjectService;
+
   constructor() {
-    getConnection().then((client) => (this.connection = client));
+    this.connection = pool;
+    this.schoolService = new SchoolService();
+    this.subjectService = new SubjectService();
   }
 
   async getAllTeachers() {
@@ -22,36 +29,12 @@ class TeacherService {
     );
 
     for (let i = 0; i < response.rows.length; i++) {
-      response.rows[i].subjects = await this.getSubjectByTeacher();
-      response.rows[i].schools = await this.getSchoolByTeacher();
+      response.rows[i].subjects = await this.subjectService.getSubjectByTeacher();
+      response.rows[i].schools = await this.schoolService.getSchoolByTeacher();
     }
 
     return response.rows;
   }
 
-  async getSchoolByTeacher() {
-    const response = await this.connection.query(
-      `SELECT 
-        s.id,
-        s.name
-      FROM school s
-      INNER JOIN employee e ON s.id = e.subjectid
-      INNER JOIN interests i ON e.schoolid = i.schoolid
-      WHERE i.userid = 1 AND e.teacherid = 1;`
-    );
-    return response.rows;
-  }
-
-  async getSubjectByTeacher() {
-    const response = await this.connection.query(
-      `SELECT 
-        s.*
-      FROM subject s
-      INNER JOIN employee e ON s.id = e.subjectid
-      INNER JOIN interests i ON e.schoolid = i.schoolid
-      WHERE i.userid = 1 AND e.teacherid = 1;`
-    );
-    return response.rows;
-  }
 }
 export default TeacherService;
