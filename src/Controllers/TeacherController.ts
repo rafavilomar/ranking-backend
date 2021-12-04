@@ -1,10 +1,10 @@
-import UserService from "../Services/UserService";
+import TeacherService from "../Services/TeacherService";
 
 class TeacherController {
-  userService: UserService;
+  userService: TeacherService;
 
   constructor() {
-    this.userService = new UserService();
+    this.userService = new TeacherService();
   }
 
   async getAllTeachers() {
