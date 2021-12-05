@@ -40,9 +40,9 @@ class TeacherService {
 
     const response = this.connection.query(
       `SELECT 
-        t.id teacherId,
-        t.fullname teacherName,
-        t.img
+        t.id AS teacherId,
+        t.fullname AS teacherName,
+        t.img,
         (SELECT COUNT(*) FROM vote where idTeacher = t.id AND vote = true) AS positiveVotes,
         (SELECT COUNT(*) FROM vote where idTeacher = t.id AND vote = false) AS negativeVotes
       FROM teacher t;`
