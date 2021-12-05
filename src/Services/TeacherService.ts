@@ -36,5 +36,20 @@ class TeacherService {
     return response.rows;
   }
 
+  async getTeacherInfo() {
+
+    const response = this.connection.query(
+      `SELECT 
+        t.id teacherId,
+        t.fullname teacherName,
+        t.img
+        (SELECT COUNT(*) FROM vote where idTeacher = t.id AND vote = true) AS positiveVotes,
+        (SELECT COUNT(*) FROM vote where idTeacher = t.id AND vote = false) AS negativeVotes
+      FROM teacher t;`
+    );
+    return (await response).rows;
+    
+  }
+
 }
 export default TeacherService;
