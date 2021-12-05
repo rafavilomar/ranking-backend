@@ -3,7 +3,7 @@ import config from "../config";
 
 // ROUTES
 import TeacherRoutes from "./Routes/TeacherRoutes";
-import CommentRoutes from "./Routes/CommentRoutes";
+import VoteRoutes from "./Routes/VoteRoutes";
 
 const app = express();
 
@@ -11,7 +11,7 @@ app.get("/", (req, res) => {
   res.send("Hello World!");
 });
 app.use("/teacher", TeacherRoutes);
-app.use("/comment", CommentRoutes);
+app.use("/vote", VoteRoutes);
 
 app.listen(config.api.port, () => {
   console.log(`Listening on port: ${config.api.port}`);
