@@ -1,14 +1,19 @@
-import UserService from "../Services/UserService";
+import TeacherService from "../Services/TeacherService";
 
 class TeacherController {
-  userService: UserService;
+  teacherService: TeacherService;
 
   constructor() {
-    this.userService = new UserService();
+    this.teacherService = new TeacherService();
   }
 
   async getAllTeachers() {
-    let response = await this.userService.getAllTeachers();
+    let response = await this.teacherService.getAllTeachers();
+    return response;
+  }
+
+  async getTeacherInfo() {
+    let response = await this.teacherService.getTeacherInfo();
     return response;
   }
 }
