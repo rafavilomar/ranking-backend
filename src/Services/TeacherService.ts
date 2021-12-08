@@ -1,43 +1,30 @@
-import { Pool } from "pg";
-import pool from "../Libs/postgres.pool";
+import typeormConnection from "../Libs/typeorm";
 import SchoolService from "./SchoolService";
 import SubjectService from "./SubjectService";
+import { Repository } from "typeorm";
+import Teacher from "../Entity/Teacher";
 
 class TeacherService {
-
-  connection: Pool;
+  connection: Repository<Teacher>;
   schoolService: SchoolService;
   subjectService: SubjectService;
 
   constructor() {
-    this.connection = pool;
+    typeormConnection
+      .then((c) => (this.connection = c.getRepository(Teacher)))
+      .catch((e) => console.error(e));
     this.schoolService = new SchoolService();
     this.subjectService = new SubjectService();
   }
 
   async getAllTeachers() {
 
-    const response = await this.connection.query(
-      `SELECT 
-        t.id AS teacherId,
-        t.fullname AS teacherName,
-        t.img
-      FROM teacher t
-      INNER JOIN employee e ON t.id = e.teacherid
-      INNER JOIN interests i ON e.schoolid = i.schoolid
-      WHERE i.userid = 1;`
-    );
+    const response = await this.connection.find();
+    return response;
 
-    for (let i = 0; i < response.rows.length; i++) {
-      response.rows[i].subjects = await this.subjectService.getSubjectByTeacher();
-      response.rows[i].schools = await this.schoolService.getSchoolByTeacher();
-    }
-
-    return response.rows;
   }
 
   async getTeacherInfo() {
-
     const response = this.connection.query(
       `SELECT 
         t.id AS teacherId,
@@ -48,8 +35,6 @@ class TeacherService {
       FROM teacher t;`
     );
     return (await response).rows;
-    
   }
-
 }
 export default TeacherService;

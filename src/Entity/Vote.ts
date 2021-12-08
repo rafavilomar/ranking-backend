@@ -1,10 +1,13 @@
 import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity()
-export default class Subject {
+export default class Vote {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ length: 64 })
-  name: string;
+  @Column()
+  vote: boolean;
+
+  @Column({ nullable: true })
+  comment?: string;
 }

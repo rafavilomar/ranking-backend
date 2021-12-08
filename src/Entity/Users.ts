@@ -1,10 +1,16 @@
 import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity()
-export default class Subject {
+export default class Users {
   @PrimaryGeneratedColumn()
   id: number;
 
   @Column({ length: 64 })
-  name: string;
+  email: string;
+
+  @Column({ nullable: true })
+  img?: string;
+
+  // @Column()
+  // idAccount: number;
 }
