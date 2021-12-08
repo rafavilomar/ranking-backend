@@ -1,4 +1,14 @@
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  OneToMany,
+  OneToOne,
+  PrimaryGeneratedColumn,
+} from "typeorm";
+import Account from "./Account";
+import Interests from "./Interests";
+import Vote from "./Vote";
 
 @Entity()
 export default class Users {
@@ -11,6 +21,13 @@ export default class Users {
   @Column({ nullable: true })
   img?: string;
 
-  // @Column()
-  // idAccount: number;
+  @OneToOne((type) => Account)
+  @JoinColumn()
+  idAccount: Account;
+
+  @OneToMany((type) => Vote, (vote) => vote.id)
+  votes: Vote[];
+  
+  @OneToMany((type) => Interests, (interest) => interest.id)
+  interests: Interests[];
 }

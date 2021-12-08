@@ -1,22 +1,27 @@
 import { Pool } from "pg";
+import Vote from "../Entity/Vote";
+import typeormConnection from "../Libs/typeorm";
 import pool from "../Libs/postgres.pool";
+import { Repository } from "typeorm";
+import Teacher from "../Entity/Teacher";
 
 class VoteService {
-
-  connection: Pool;
+  connection: Repository<Vote>;
   constructor() {
-    this.connection = pool
+    typeormConnection
+      .then((c) => (this.connection = c.getRepository(Vote)))
+      .catch((e) => console.error(e));
   }
 
   async makeVote() {
     const response = await this.connection.query(
       `INSERT INTO vote (idteacher, idusers, vote, comment, timestamp)
       VALUES (1,1,true,'Excelente profesor!!.', CURRENT_DATE);`
-    )
+    );
     return response.rows;
   }
 
-  async getCommentByTeacher(){
+  async getCommentByTeacher() {
     const response = await this.connection.query(
       `SELECT 
         v.id,
@@ -32,6 +37,14 @@ class VoteService {
     );
 
     return response.rows;
+  }
+
+  async getVotesByTeacher(teacher: Teacher, vote: boolean) {
+    const response = await this.connection.find({
+      teacher: teacher,
+      vote: vote,
+    });
+    return response.length;
   }
 }
 export default VoteService;

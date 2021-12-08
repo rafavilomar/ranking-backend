@@ -1,4 +1,6 @@
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import Employee from "./Employee";
+import Interests from "./Interests";
 
 @Entity()
 export default class School {
@@ -10,4 +12,10 @@ export default class School {
 
   @Column({ length: 30, unique: true })
   category: string;
+
+  @OneToMany((type) => Interests, (interest) => interest.id)
+  interests: Interests[];
+
+  @OneToMany((type) => Employee, (employee) => employee.id)
+  employees: Employee[];
 }

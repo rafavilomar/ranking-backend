@@ -1,4 +1,12 @@
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+} from "typeorm";
+import Teacher from "./Teacher";
+import Users from "./Users";
 
 @Entity()
 export default class Vote {
@@ -10,4 +18,15 @@ export default class Vote {
 
   @Column({ nullable: true })
   comment?: string;
+
+  @Column()
+  timestamp: Date = new Date();
+
+  @ManyToOne((type) => Teacher, (teacher) => teacher.id)
+  @JoinColumn()
+  teacher: Teacher;
+
+  @ManyToOne((type) => Users, (user) => user.id)
+  @JoinColumn()
+  users: Users;
 }
