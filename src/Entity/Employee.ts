@@ -10,7 +10,7 @@ export default class Employee {
 
   @ManyToOne((type) => Subject, (subject) => subject.id)
   @JoinColumn()
-  subjectId: Subject;
+  subject: Subject;
 
   @ManyToOne((type) => School, (school) => school.id)
   @JoinColumn()

@@ -6,6 +6,8 @@ import {
   PrimaryGeneratedColumn,
 } from "typeorm";
 import Employee from "./Employee";
+import School from "./School";
+import Subject from "./Subject";
 import Vote from "./Vote";
 
 @Entity()
@@ -27,4 +29,6 @@ export default class Teacher extends BaseEntity {
 
   positiveVotes?: number;
   negativeVotes?: number;
+  subjects?: Subject[];
+  schools?: School[];
 }

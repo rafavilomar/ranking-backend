@@ -9,9 +9,9 @@ export default class Interests {
 
   @ManyToOne((type) => Users, (user) => user.id)
   @JoinColumn()
-  userId: Users;
+  users: Users;
 
   @ManyToOne((type) => School, (school) => school.id)
   @JoinColumn()
-  schoolId: School;
+  school: School;
 }

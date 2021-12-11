@@ -1,24 +1,25 @@
-import { Pool } from "pg";
-import pool from "../Libs/postgres.pool";
+import typeormConnection from "../Libs/typeorm";
+import { Repository } from "typeorm";
+import Subject from "../Entity/Subject";
 
 class SubjectService {
-
-  connection: Pool;
+  connection: Repository<Subject>;
   constructor() {
-    this.connection = pool;
+    typeormConnection
+      .then((c) => (this.connection = c.getRepository(Subject)))
+      .catch((e) => console.error(e));
   }
-  
+
   async getSubjectByTeacher() {
     const response = await this.connection.query(
-      `SELECT 
+      `SELECT
         s.*
       FROM subject s
-      INNER JOIN employee e ON s.id = e.subjectid
-      INNER JOIN interests i ON e.schoolid = i.schoolid
-      WHERE i.userid = 1 AND e.teacherid = 1;`
+      INNER JOIN employee e ON s.id = e."subjectId"
+      INNER JOIN interests i ON e."schoolId" = i."schoolId"
+      WHERE i."usersId" = 1 AND e."teacherId" = 1;`
     );
-    return response.rows;
+    return response;
   }
-
 }
 export default SubjectService;

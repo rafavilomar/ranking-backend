@@ -21,8 +21,19 @@ class TeacherService {
   }
 
   async getAllTeachers() {
-    //todo: get subjects and schools
-    const response = await this.connection.find();
+    const response = await this.connection.query(
+      `SELECT 
+        t.*
+      FROM teacher t
+      INNER JOIN employee e ON t.id = e."teacherId"
+      INNER JOIN interests i ON e."schoolId" = i."schoolId"
+      WHERE i."usersId" = 1;`
+    );
+
+    for (let i = 0; i < response.length; i++) {
+      response[i].subjects = await this.subjectService.getSubjectByTeacher();
+      response[i].schools = await this.schoolService.getSchoolByTeacher();
+    }
     return response;
   }
 
