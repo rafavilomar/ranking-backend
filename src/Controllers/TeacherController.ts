@@ -12,8 +12,8 @@ class TeacherController {
     return response;
   }
 
-  async getTeacherInfo() {
-    let response = await this.teacherService.getTeacherInfo();
+  async getTeacherInfo(id: number) {
+    let response = await this.teacherService.getTeacherInfo(id);
     return response;
   }
 }

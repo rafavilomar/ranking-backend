@@ -21,7 +21,7 @@ class TeacherService {
   }
 
   async getAllTeachers() {
-    const response = await this.connection.query(
+    const response: Teacher[] = await this.connection.query(
       `SELECT 
         t.*
       FROM teacher t
@@ -31,25 +31,28 @@ class TeacherService {
     );
 
     for (let i = 0; i < response.length; i++) {
-      response[i].subjects = await this.subjectService.getSubjectByTeacher();
-      response[i].schools = await this.schoolService.getSchoolByTeacher();
+      response[i].subjects = await this.subjectService.getSubjectByTeacher(response[i].id);
+      response[i].schools = await this.schoolService.getSchoolByTeacher(response[i].id);
     }
     return response;
   }
 
-  async getTeacherInfo() {
+  async getTeacherInfo(id: number) {
     const response: Teacher = await this.connection.findOne(
-      { id: 1 },
+      { id: id },
       { relations: ["votes"] }
     );
-    response.positiveVotes = await this.voteService.getVotesByTeacher(
-      response,
-      true
-    );
-    response.negativeVotes = await this.voteService.getVotesByTeacher(
-      response,
-      false
-    );
+    if (response) {
+      response.positiveVotes = await this.voteService.getVotesByTeacher(
+        response,
+        true
+      );
+      response.negativeVotes = await this.voteService.getVotesByTeacher(
+        response,
+        false
+      );
+    }
+
     return response;
   }
 }

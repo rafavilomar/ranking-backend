@@ -29,9 +29,9 @@ class VoteService {
     return response;
   }
 
-  async getCommentByTeacher() {
+  async getCommentByTeacher(id: number) {
     let teacher = new Teacher();
-    teacher.id = 1;
+    teacher.id = id;
 
     const response = await this.connection.find({
       teacher: teacher,

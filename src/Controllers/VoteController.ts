@@ -7,8 +7,8 @@ class CommentController {
     this.voteService = new VoteService();
   }
 
-  async getCommentByTeacher() {
-    let response = this.voteService.getCommentByTeacher();
+  async getCommentByTeacher(id: number) {
+    let response = this.voteService.getCommentByTeacher(id);
     return response;
   }
 

@@ -13,7 +13,7 @@ async function makeVote(req: any, res: any) {
 }
 
 async function getCommentByTeacher(req: any, res: any) {
-  let response = await voteController.getCommentByTeacher();
+  let response = await voteController.getCommentByTeacher(req.params.id);
   res.json(response);
 }
 

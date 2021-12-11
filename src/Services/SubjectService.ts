@@ -10,14 +10,14 @@ class SubjectService {
       .catch((e) => console.error(e));
   }
 
-  async getSubjectByTeacher() {
+  async getSubjectByTeacher(teacherId: number) {
     const response = await this.connection.query(
       `SELECT
         s.*
       FROM subject s
       INNER JOIN employee e ON s.id = e."subjectId"
       INNER JOIN interests i ON e."schoolId" = i."schoolId"
-      WHERE i."usersId" = 1 AND e."teacherId" = 1;`
+      WHERE i."usersId" = 1 AND e."teacherId" = ${teacherId};`
     );
     return response;
   }
