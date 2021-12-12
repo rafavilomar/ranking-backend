@@ -15,19 +15,19 @@ export default class Users {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ length: 64 })
+  @Column({ length: 64, nullable: false })
   email: string;
 
   @Column({ nullable: true })
   img?: string;
 
-  @OneToOne((type) => Account)
+  @OneToOne((type) => Account, { nullable: false })
   @JoinColumn()
   idAccount: Account;
 
   @OneToMany((type) => Vote, (vote) => vote.users)
   votes: Vote[];
-  
+
   @OneToMany((type) => Interests, (interest) => interest.users)
   interests: Interests[];
 }
