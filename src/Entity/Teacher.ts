@@ -24,7 +24,7 @@ export default class Teacher extends BaseEntity {
   @OneToMany((type) => Vote, (vote) => vote.teacher)
   votes: Vote[];
 
-  @OneToMany((type) => Employee, (employee) => employee.id)
+  @OneToMany((type) => Employee, (employee) => employee.teacher)
   employees: Employee[];
 
   positiveVotes?: number;

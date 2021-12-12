@@ -25,9 +25,9 @@ export default class Users {
   @JoinColumn()
   idAccount: Account;
 
-  @OneToMany((type) => Vote, (vote) => vote.id)
+  @OneToMany((type) => Vote, (vote) => vote.users)
   votes: Vote[];
   
-  @OneToMany((type) => Interests, (interest) => interest.id)
+  @OneToMany((type) => Interests, (interest) => interest.users)
   interests: Interests[];
 }

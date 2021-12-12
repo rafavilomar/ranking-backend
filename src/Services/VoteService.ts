@@ -38,7 +38,7 @@ class VoteService {
     });
     return response;
   }
-
+  
   async getVotesByTeacher(teacher: Teacher, vote: boolean) {
     const response = await this.connection.find({
       teacher: teacher,
