@@ -13,7 +13,7 @@ async function getAllTeachers(req: any, res: any) {
 }
 
 async function getTeacherInfo(req: any, res: any) {
-  let response = await teacherController.getTeacherInfo();
+  let response = await teacherController.getTeacherInfo(req.params.id);
   res.json(response);
 }
 

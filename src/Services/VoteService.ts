@@ -1,37 +1,50 @@
-import { Pool } from "pg";
-import pool from "../Libs/postgres.pool";
+import Vote from "../Entity/Vote";
+import typeormConnection from "../Libs/typeorm";
+import { Repository } from "typeorm";
+import Teacher from "../Entity/Teacher";
+import Users from "../Entity/Users";
 
 class VoteService {
-
-  connection: Pool;
+  connection: Repository<Vote>;
   constructor() {
-    this.connection = pool
+    typeormConnection
+      .then((c) => (this.connection = c.getRepository(Vote)))
+      .catch((e) => console.error(e));
   }
 
   async makeVote() {
-    const response = await this.connection.query(
-      `INSERT INTO vote (idteacher, idusers, vote, comment, timestamp)
-      VALUES (1,1,true,'Excelente profesor!!.', CURRENT_DATE);`
-    )
-    return response.rows;
+    let teacher = new Teacher();
+    teacher.id = 1;
+
+    let user = new Users();
+    user.id = 1;
+
+    let vote = new Vote();
+    vote.teacher = teacher;
+    vote.users = user;
+    vote.vote = false;
+    vote.comment = "Sinceramente, no me ha gustado mucho :(";
+
+    const response = await this.connection.save(vote);
+    return response;
   }
 
-  async getCommentByTeacher(){
-    const response = await this.connection.query(
-      `SELECT 
-        v.id,
-        v.vote,
-        v.comment,
-        v.timestamp,
-        a.username,
-        u.img
-      FROM vote v
-      INNER JOIN users u ON v.idusers = u.id
-      INNER JOIN account a ON u.idaccount = a.id
-      WHERE v.idteacher = 1;`
-    );
+  async getCommentByTeacher(id: number) {
+    let teacher = new Teacher();
+    teacher.id = id;
 
-    return response.rows;
+    const response = await this.connection.find({
+      teacher: teacher,
+    });
+    return response;
+  }
+  
+  async getVotesByTeacher(teacher: Teacher, vote: boolean) {
+    const response = await this.connection.find({
+      teacher: teacher,
+      vote: vote,
+    });
+    return response.length;
   }
 }
 export default VoteService;

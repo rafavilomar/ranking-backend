@@ -5,6 +5,7 @@ import config from "../config";
 // ROUTES
 import TeacherRoutes from "./Routes/TeacherRoutes";
 import VoteRoutes from "./Routes/VoteRoutes";
+import UsersRoutes from "./Routes/UsersRoutes";
 
 const app = express();
 app.use(cors());
@@ -14,6 +15,7 @@ app.get("/", (req, res) => {
 });
 app.use("/teacher", TeacherRoutes);
 app.use("/vote", VoteRoutes);
+app.use("/user", UsersRoutes);
 
 app.listen(config.api.port, () => {
   console.log(`Listening on port: ${config.api.port}`);

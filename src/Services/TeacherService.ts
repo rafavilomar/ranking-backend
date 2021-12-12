@@ -1,55 +1,59 @@
-import { Pool } from "pg";
-import pool from "../Libs/postgres.pool";
+import typeormConnection from "../Libs/typeorm";
 import SchoolService from "./SchoolService";
 import SubjectService from "./SubjectService";
+import { Repository } from "typeorm";
+import Teacher from "../Entity/Teacher";
+import VoteService from "./VoteService";
 
 class TeacherService {
-
-  connection: Pool;
+  connection: Repository<Teacher>;
   schoolService: SchoolService;
   subjectService: SubjectService;
+  voteService: VoteService;
 
   constructor() {
-    this.connection = pool;
+    typeormConnection
+      .then((c) => (this.connection = c.getRepository(Teacher)))
+      .catch((e) => console.error(e));
     this.schoolService = new SchoolService();
     this.subjectService = new SubjectService();
+    this.voteService = new VoteService();
   }
 
   async getAllTeachers() {
-
-    const response = await this.connection.query(
+    const response: Teacher[] = await this.connection.query(
       `SELECT 
-        t.id AS teacherId,
-        t.fullname AS teacherName,
-        t.img
+        t.*
       FROM teacher t
-      INNER JOIN employee e ON t.id = e.teacherid
-      INNER JOIN interests i ON e.schoolid = i.schoolid
-      WHERE i.userid = 1;`
+      INNER JOIN employee e ON t.id = e."teacherId"
+      INNER JOIN interests i ON e."schoolId" = i."schoolId"
+      WHERE i."usersId" = 1;`
     );
 
-    for (let i = 0; i < response.rows.length; i++) {
-      response.rows[i].subjects = await this.subjectService.getSubjectByTeacher();
-      response.rows[i].schools = await this.schoolService.getSchoolByTeacher();
+    for (let i = 0; i < response.length; i++) {
+      response[i].subjects = await this.subjectService.getSubjectByTeacher(response[i].id);
+      response[i].schools = await this.schoolService.getSchoolByTeacher(response[i].id);
+    }
+    return response;
+  }
+
+  async getTeacherInfo(id: number) {
+    const response: Teacher = await this.connection.findOne(
+      { id: id },
+      { relations: ["votes"] }
+    );
+    if (response) {
+      response.positiveVotes = await this.voteService.getVotesByTeacher(
+        response,
+        true
+      );
+      response.negativeVotes = await this.voteService.getVotesByTeacher(
+        response,
+        false
+      );
     }
 
-    return response.rows;
+    return response;
   }
-
-  async getTeacherInfo() {
-
-    const response = this.connection.query(
-      `SELECT 
-        t.id AS teacherId,
-        t.fullname AS teacherName,
-        t.img,
-        (SELECT COUNT(*) FROM vote where idTeacher = t.id AND vote = true) AS positiveVotes,
-        (SELECT COUNT(*) FROM vote where idTeacher = t.id AND vote = false) AS negativeVotes
-      FROM teacher t;`
-    );
-    return (await response).rows;
-    
-  }
-
 }
 export default TeacherService;
