@@ -12,12 +12,12 @@ import School from "../Entity/School";
 import Subject from "../Entity/Subject";
 
 const typeormConnection = createConnection({
-  type: "postgres",
-  host: config.postgress.host,
-  port: config.postgress.port,
-  username: config.postgress.user,
-  password: config.postgress.password,
-  database: config.postgress.database,
+  type: "mysql",
+  host: config.mysql.host,
+  port: config.mysql.port,
+  username: config.mysql.user,
+  password: config.mysql.password,
+  database: config.mysql.database,
   entities: [
     Teacher,
     Users,
