@@ -1,3 +1,4 @@
+import UsersDTO from "../Entity/DTOs/UsersDTO";
 import UsersService from "../Services/UsersService";
 
 class UsersController {
@@ -9,6 +10,11 @@ class UsersController {
 
   async getUserInfo() {
     let response = await this.userService.getUserInfo();
+    return response;
+  }
+
+  async createUser(newUser: UsersDTO) {
+    let response = await this.userService.createUser(newUser);
     return response;
   }
 }

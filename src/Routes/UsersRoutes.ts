@@ -4,10 +4,16 @@ import UsersController from "../Controllers/UsersController";
 const router = express.Router();
 let userController = new UsersController();
 
+router.post("/", createUser);
 router.get("/:id", getUserInfo);
 
 async function getUserInfo(req: any, res: any) {
   let response = await userController.getUserInfo();
+  res.json(response);
+}
+
+async function createUser(req: any, res: any) {
+  let response = await userController.createUser(req.body);
   res.json(response);
 }
 
