@@ -17,9 +17,9 @@ class SchoolService {
         s.id,
         s.name
       FROM school s
-      INNER JOIN employee e ON s.id = e."subjectId"
-      INNER JOIN interests i ON e."schoolId" = i."schoolId"
-      WHERE i."usersId" = 1 AND e."teacherId" = ${teacherId};`
+      INNER JOIN employee e ON s.id = e.subjectId
+      INNER JOIN interests i ON e.schoolId = i.schoolId
+      WHERE i.usersId = 1 AND e.teacherId = ${teacherId};`
     );
     return response;
   }
