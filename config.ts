@@ -3,7 +3,8 @@ import {config as envConfig} from "dotenv";
 envConfig()
 const config = {
   api: {
-    port: process.env.API_PORT || ''
+    port: process.env.API_PORT || '',
+    secret: process.env.JWT_SECRET || ''
   },
   postgress: {
     host: process.env.POSTGRES_HOST || '',

@@ -15,7 +15,7 @@ export default class Users {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ length: 64, nullable: false })
+  @Column({ length: 64, nullable: false, unique: true })
   email: string;
 
   @Column({ nullable: true })

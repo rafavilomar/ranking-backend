@@ -6,6 +6,7 @@ import config from "../config";
 import TeacherRoutes from "./Routes/TeacherRoutes";
 import VoteRoutes from "./Routes/VoteRoutes";
 import UsersRoutes from "./Routes/UsersRoutes";
+import AuthRoutes from "./Routes/AuthRoutes";
 import bodyParser from "body-parser";
 
 const app = express();
@@ -15,6 +16,7 @@ app.use(bodyParser.json())
 app.get("/", (req, res) => {
   res.send("Hello World!");
 });
+app.use("/", AuthRoutes);
 app.use("/teacher", TeacherRoutes);
 app.use("/vote", VoteRoutes);
 app.use("/user", UsersRoutes);
