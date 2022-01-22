@@ -1,4 +1,4 @@
-export default class LoginInfoDTO {
+export default class LoginRequestDTO {
     username: string;
     password: string;
 }

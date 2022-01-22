@@ -1,4 +1,4 @@
-import LoginInfoDTO from "../Entity/DTOs/LoginInfoDTO";
+import LoginRequestDTO from "../Entity/DTOs/LoginRequestDTO";
 import AccountService from "../Services/AccountService";
 
 class AuthController {
@@ -8,7 +8,7 @@ class AuthController {
         this.accountService = new AccountService();
     }
 
-    async login(loginInfo: LoginInfoDTO) {
+    async login(loginInfo: LoginRequestDTO) {
         let response = this.accountService.login(loginInfo);
         return response;
     }
