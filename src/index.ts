@@ -1,6 +1,7 @@
 import express from "express";
 import cors from "cors";
 import config from "../config";
+import passport from "passport";
 
 // ROUTES
 import TeacherRoutes from "./Routes/TeacherRoutes";
@@ -17,9 +18,9 @@ app.get("/", (req, res) => {
   res.send("Hello World!");
 });
 app.use("/", AuthRoutes);
-app.use("/teacher", TeacherRoutes);
-app.use("/vote", VoteRoutes);
-app.use("/user", UsersRoutes);
+app.use("/teacher", passport.authenticate('jwt', { session: false }), TeacherRoutes);
+app.use("/vote", passport.authenticate('jwt', { session: false }), VoteRoutes);
+app.use("/user", passport.authenticate('jwt', { session: false }), UsersRoutes);
 
 app.listen(config.api.port, () => {
   console.log(`Listening on port: ${config.api.port}`);

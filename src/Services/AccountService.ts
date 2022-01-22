@@ -4,8 +4,8 @@ import bycrypt from "bcrypt";
 
 import Account from "../Entity/Account";
 import { signToken } from "../Utils/token";
-import LoginRequestDTO from "../Entity/DTOs/LoginRequestDTO";
-import LoginResponseDTO from "../Entity/DTOs/LoginResponseDTO";
+import LoginRequestDTO from "../Entity/DTOs/login/LoginRequestDTO";
+import LoginResponseDTO from "../Entity/DTOs/login/LoginResponseDTO";
 
 class AccountService {
     connection: Repository<Account>;

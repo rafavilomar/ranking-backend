@@ -8,7 +8,7 @@ router.post("/", makeVote);
 router.get("/byTeacher/:id", getCommentByTeacher);
 
 async function makeVote(req: any, res: any) {
-  let response = await voteController.makeVote();
+  let response = await voteController.makeVote(req.body);
   res.json(response);
 }
 

@@ -1,4 +1,4 @@
-import LoginRequestDTO from "../Entity/DTOs/LoginRequestDTO";
+import LoginRequestDTO from "../Entity/DTOs/login/LoginRequestDTO";
 import AccountService from "../Services/AccountService";
 
 class AuthController {
