@@ -12,11 +12,6 @@ class UsersController {
     let response = await this.userService.getUserInfo();
     return response;
   }
-
-  async createUser(newUser: UsersDTO) {
-    let response = await this.userService.createUser(newUser);
-    return response;
-  }
 }
 
 export default UsersController;

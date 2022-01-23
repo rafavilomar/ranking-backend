@@ -34,7 +34,6 @@ class UsersService {
       
       let user = new Users();
       user.email = newUser.email;
-      user.img = newUser.img;
       user.idAccount = accountCreated;
       const userCreated: Users = await this.connection.save(user);
 

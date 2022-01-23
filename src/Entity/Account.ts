@@ -5,10 +5,10 @@ export default class Account {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ length: 15, nullable: false, unique: true })
+  @Column({ length: 32, nullable: false, unique: true })
   username: string;
 
-  @Column({ length: 64, nullable: false })
+  @Column({ nullable: false })
   password: string;
 
   @Column({ nullable: false })
