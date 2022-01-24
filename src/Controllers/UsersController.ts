@@ -1,3 +1,4 @@
+import UsersDTO from "../Entity/DTOs/UsersDTO";
 import UsersService from "../Services/UsersService";
 
 class UsersController {

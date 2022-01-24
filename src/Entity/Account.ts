@@ -5,12 +5,12 @@ export default class Account {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ length: 15 })
+  @Column({ length: 32, nullable: false, unique: true })
   username: string;
 
-  @Column({ length: 64 })
+  @Column({ nullable: false })
   password: string;
 
-  @Column()
-  timestamp: Date;
+  @Column({ nullable: false })
+  timestamp: Date = new Date();
 }

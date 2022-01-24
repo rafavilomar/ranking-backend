@@ -1,3 +1,4 @@
+import VoteRequestDTO from "../Entity/DTOs/vote/VoteRequestDTO";
 import VoteService from "../Services/VoteService";
 
 class CommentController {
@@ -12,8 +13,8 @@ class CommentController {
     return response;
   }
 
-  async makeVote(){
-    let response = this.voteService.makeVote();
+  async makeVote(vote: VoteRequestDTO){
+    let response = this.voteService.makeVote(vote);
     return response;
   }
 }

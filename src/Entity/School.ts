@@ -7,7 +7,7 @@ export default class School {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ length: 64 })
+  @Column({ length: 64, nullable: false })
   name: string;
 
   @Column({ length: 30, unique: true })

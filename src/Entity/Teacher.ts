@@ -15,7 +15,7 @@ export default class Teacher extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ length: 64 })
+  @Column({ length: 64, nullable: false })
   fullname: string;
 
   @Column({ nullable: true })

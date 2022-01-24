@@ -15,13 +15,13 @@ export default class Vote {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
+  @Column({ nullable: false })
   vote: boolean;
 
   @Column({ nullable: true })
   comment?: string;
 
-  @Column()
+  @Column({ nullable: false })
   timestamp: Date = new Date();
 
   @ManyToOne((type) => Teacher, (teacher) => teacher.id, { nullable: false })

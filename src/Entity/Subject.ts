@@ -6,7 +6,7 @@ export default class Subject {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ length: 64, unique: true })
+  @Column({ length: 64, unique: true, nullable: false })
   name: string;
 
   @OneToMany((type) => Employee, (employee) => employee.subject)

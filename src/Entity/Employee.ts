@@ -8,15 +8,15 @@ export default class Employee {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @ManyToOne((type) => Subject, (subject) => subject.id)
+  @ManyToOne((type) => Subject, (subject) => subject.id, { nullable: false })
   @JoinColumn()
   subject: Subject;
 
-  @ManyToOne((type) => School, (school) => school.id)
+  @ManyToOne((type) => School, (school) => school.id, { nullable: false })
   @JoinColumn()
   school: School;
 
-  @ManyToOne((type) => Teacher, (teacher) => teacher.id)
+  @ManyToOne((type) => Teacher, (teacher) => teacher.id, { nullable: false })
   @JoinColumn()
   teacher: Teacher;
 }

@@ -3,6 +3,7 @@ import typeormConnection from "../Libs/typeorm";
 import { Repository } from "typeorm";
 import Teacher from "../Entity/Teacher";
 import Users from "../Entity/Users";
+import VoteRequestDTO from "../Entity/DTOs/vote/VoteRequestDTO";
 
 class VoteService {
   connection: Repository<Vote>;
@@ -12,20 +13,26 @@ class VoteService {
       .catch((e) => console.error(e));
   }
 
-  async makeVote() {
+  async makeVote(vote: VoteRequestDTO) {
     let teacher = new Teacher();
-    teacher.id = 1;
+    teacher.id = vote.teacherId;
 
     let user = new Users();
-    user.id = 1;
+    user.id = vote.usersId;
 
-    let vote = new Vote();
-    vote.teacher = teacher;
-    vote.users = user;
-    vote.vote = false;
-    vote.comment = "Sinceramente, no me ha gustado mucho :(";
+    let newVote = new Vote;
+    newVote.teacher = teacher;
+    newVote.users = user;
+    newVote.vote = vote.vote;
+    newVote.comment = vote.comment;
 
-    const response = await this.connection.save(vote);
+    // let newVote1: Vote = new Vote();
+    // vote.teacher = teacher;
+    // vote.users = user;
+    // vote.vote = false;
+    // vote.comment = "Sinceramente, no me ha gustado mucho :(";
+
+    const response = await this.connection.save(newVote);
     return response;
   }
 
@@ -38,7 +45,7 @@ class VoteService {
     });
     return response;
   }
-  
+
   async getVotesByTeacher(teacher: Teacher, vote: boolean) {
     const response = await this.connection.find({
       teacher: teacher,
