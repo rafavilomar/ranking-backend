@@ -6,10 +6,13 @@ import passport from "passport";
 import Account from "../Entity/Account";
 
 export const signToken = (account: Account) => {
+
+    const expirationTime = config.api.time * 60;
+
     const payload = {
         sub: account.username
     }
-    return jwt.sign(payload, config.api.secret);
+    return jwt.sign(payload, config.api.secret, { expiresIn: expirationTime });
 }
 
 export const verifyToken = (token: string) => {
