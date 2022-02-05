@@ -7,7 +7,7 @@ import Account from "../Entity/Account";
 
 export const signToken = (account: Account) => {
 
-    const expirationTime = config.api.time * 60;
+    const expirationTime = config.api.time * 60 * 60;
 
     const payload = {
         sub: account.username
