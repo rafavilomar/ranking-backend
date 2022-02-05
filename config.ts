@@ -4,7 +4,8 @@ envConfig()
 const config = {
   api: {
     port: process.env.API_PORT || '',
-    secret: process.env.JWT_SECRET || ''
+    secret: process.env.JWT_SECRET || '',
+    time: parseInt(process.env.JWT_HOURS) || parseInt("")
   },
   postgress: {
     host: process.env.POSTGRES_HOST || '',
