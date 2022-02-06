@@ -4,6 +4,7 @@ import SubjectService from "./SubjectService";
 import { Like, Repository } from "typeorm";
 import Teacher from "../Entity/Teacher";
 import VoteService from "./VoteService";
+import { TokenPayload, verifyToken } from "../Utils/token";
 
 class TeacherService {
   connection: Repository<Teacher>;
@@ -33,7 +34,10 @@ class TeacherService {
     return response;
   }
 
-  async getAllTeachers() {
+  async getAllTeachers(req: any) {
+
+    const token: string = req.headers.authorization.split(" ")[1];
+    const tokenPayload: TokenPayload = verifyToken(token);
 
     const response: Teacher[] = await this.connection.query(
       `SELECT 
@@ -41,7 +45,7 @@ class TeacherService {
       FROM teacher t
       INNER JOIN employee e ON t.id = e.teacherId
       INNER JOIN interests i ON e.schoolId = i.schoolId
-      WHERE i.usersId = 1;`
+      WHERE i.usersId = ${tokenPayload.id};`
     );
 
     for (let i = 0; i < response.length; i++) {

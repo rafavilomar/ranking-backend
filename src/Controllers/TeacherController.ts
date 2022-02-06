@@ -7,8 +7,8 @@ class TeacherController {
     this.teacherService = new TeacherService();
   }
 
-  async getAllTeachers() {
-    let response = await this.teacherService.getAllTeachers();
+  async getAllTeachers(req: any) {
+    let response = await this.teacherService.getAllTeachers(req);
     return response;
   }
 

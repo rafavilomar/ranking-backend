@@ -6,11 +6,18 @@ import passport from "passport";
 import Account from "../Entity/Account";
 import Users from "../Entity/Users";
 
+export type TokenPayload = {
+    sub: string,
+    id: number,
+    iat?: number,
+    exp?: number
+}
+
 export const signToken = (account: Account, user: Users) => {
 
     const expirationTime = config.api.time * 60 * 60;
 
-    const payload = {
+    const payload: TokenPayload = {
         sub: account.username,
         id: user.id
     }
@@ -18,7 +25,8 @@ export const signToken = (account: Account, user: Users) => {
 }
 
 export const verifyToken = (token: string) => {
-    return jwt.verify(token, config.api.secret)
+    const tokenPayload:  TokenPayload = jwt.verify(token, config.api.secret) as TokenPayload; 
+    return tokenPayload;
 }
 
 export const validateToken = () => {
