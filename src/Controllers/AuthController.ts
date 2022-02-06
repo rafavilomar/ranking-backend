@@ -1,24 +1,20 @@
-import UsersService from "../Services/UsersService";
-import LoginRequestDTO from "../Entity/DTOs/login/LoginRequestDTO";
-import AccountService from "../Services/AccountService";
+//DTOs
 import UsersDTO from "../Entity/DTOs/UsersDTO";
+import LoginRequestDTO from "../Entity/DTOs/login/LoginRequestDTO";
+
+//SERVICES
+import UsersService from "../Services/UsersService";
+import AccountService from "../Services/AccountService";
 
 class AuthController {
-    accountService: AccountService;
-    userService: UsersService
 
-    constructor() {
-        this.accountService = new AccountService();
-        this.userService = new UsersService();
-    }
-
-    async login(loginInfo: LoginRequestDTO) {
-        let response = this.accountService.login(loginInfo);
+    static async login(loginInfo: LoginRequestDTO) {
+        let response = AccountService.login(loginInfo);
         return response;
     }
 
-    async register(user: UsersDTO) {
-        let response = this.userService.createUser(user);
+    static async register(user: UsersDTO) {
+        let response = UsersService.createUser(user);
         return response;
     }
 

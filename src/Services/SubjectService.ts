@@ -1,17 +1,13 @@
 import typeormConnection from "../Libs/typeorm";
-import { Repository } from "typeorm";
+
+//ENTITES
 import Subject from "../Entity/Subject";
 
 class SubjectService {
-  connection: Repository<Subject>;
-  constructor() {
-    typeormConnection
-      .then((c) => (this.connection = c.getRepository(Subject)))
-      .catch((e) => console.error(e));
-  }
 
-  async getSubjectByTeacher(teacherId: number) {
-    const response = await this.connection.query(
+  static async getSubjectByTeacher(teacherId: number) {
+    const connection = (await typeormConnection).getRepository(Subject);
+    const response = await connection.query(
       `SELECT
         s.*
       FROM subject s

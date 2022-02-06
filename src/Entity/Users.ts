@@ -21,13 +21,13 @@ export default class Users {
   @Column({ nullable: true })
   img?: string;
 
-  @OneToOne((type) => Account, { nullable: false })
+  @OneToOne(() => Account, idAccount => idAccount.user, { nullable: false })
   @JoinColumn()
   idAccount: Account;
 
-  @OneToMany((type) => Vote, (vote) => vote.users)
+  @OneToMany(() => Vote, (vote) => vote.users)
   votes: Vote[];
 
-  @OneToMany((type) => Interests, (interest) => interest.users)
+  @OneToMany(() => Interests, (interest) => interest.users)
   interests: Interests[];
 }

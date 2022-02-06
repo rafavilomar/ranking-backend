@@ -4,16 +4,29 @@ import { ExtractJwt, Strategy, StrategyOptions } from "passport-jwt"
 import passport from "passport";
 
 import Account from "../Entity/Account";
+import Users from "../Entity/Users";
 
-export const signToken = (account: Account) => {
-    const payload = {
-        sub: account.username
+export type TokenPayload = {
+    sub: string,
+    id: number,
+    iat?: number,
+    exp?: number
+}
+
+export const signToken = (account: Account, user: Users) => {
+
+    const expirationTime = config.api.time * 60 * 60;
+
+    const payload: TokenPayload = {
+        sub: account.username,
+        id: user.id
     }
-    return jwt.sign(payload, config.api.secret);
+    return jwt.sign(payload, config.api.secret, { expiresIn: expirationTime });
 }
 
 export const verifyToken = (token: string) => {
-    return jwt.verify(token, config.api.secret)
+    const tokenPayload:  TokenPayload = jwt.verify(token, config.api.secret) as TokenPayload; 
+    return tokenPayload;
 }
 
 export const validateToken = () => {
