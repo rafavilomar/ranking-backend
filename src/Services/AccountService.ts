@@ -6,6 +6,8 @@ import Account from "../Entity/Account";
 import { signToken } from "../Utils/token";
 import LoginRequestDTO from "../Entity/DTOs/login/LoginRequestDTO";
 import LoginResponseDTO from "../Entity/DTOs/login/LoginResponseDTO";
+import Users from "../Entity/Users";
+import UsersService from "./UsersService";
 
 class AccountService {
     connection: Repository<Account>;
@@ -18,11 +20,12 @@ class AccountService {
     async login(loginInfo: LoginRequestDTO) {
         const account: Account = await this.connection.findOne({ username: loginInfo.username });
         if (account && bycrypt.compareSync(loginInfo.password, account.password)) {
+            const user: Users = await UsersService.getByAccount(account);
             let response: LoginResponseDTO = {
                 id: account.id,
                 username: account.username,
                 img: "",
-                token: signToken(account)
+                token: signToken(account, user)
             };
             return response;
         } else {

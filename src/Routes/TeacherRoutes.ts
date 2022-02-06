@@ -1,4 +1,5 @@
 import express from "express";
+import { verifyToken } from "../Utils/token";
 import TeacherController from "../Controllers/TeacherController";
 
 const router = express.Router();
@@ -9,6 +10,10 @@ router.get("/:id", getTeacherInfo);
 router.get("/search/:fullname", searchTeachers);
 
 async function getAllTeachers(req: any, res: any) {
+  let test: string = req.headers.authorization.split(" ")[1];
+  console.log(test);
+  console.log(verifyToken(test));
+  
   let response = await teacherController.getAllTeachers();
   res.json(response);
 }
