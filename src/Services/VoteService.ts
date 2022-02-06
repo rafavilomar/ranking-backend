@@ -1,19 +1,18 @@
-import Vote from "../Entity/Vote";
 import typeormConnection from "../Libs/typeorm";
-import { Repository } from "typeorm";
+
+//ENTITIES
 import Teacher from "../Entity/Teacher";
 import Users from "../Entity/Users";
+import Vote from "../Entity/Vote";
+
+//DTOs
 import VoteRequestDTO from "../Entity/DTOs/vote/VoteRequestDTO";
 
 class VoteService {
-  connection: Repository<Vote>;
-  constructor() {
-    typeormConnection
-      .then((c) => (this.connection = c.getRepository(Vote)))
-      .catch((e) => console.error(e));
-  }
 
-  async makeVote(vote: VoteRequestDTO) {
+  static async makeVote(vote: VoteRequestDTO) {
+    
+    const connection = (await typeormConnection).getRepository(Vote);
     let teacher = new Teacher();
     teacher.id = vote.teacherId;
 
@@ -26,28 +25,26 @@ class VoteService {
     newVote.vote = vote.vote;
     newVote.comment = vote.comment;
 
-    // let newVote1: Vote = new Vote();
-    // vote.teacher = teacher;
-    // vote.users = user;
-    // vote.vote = false;
-    // vote.comment = "Sinceramente, no me ha gustado mucho :(";
-
-    const response = await this.connection.save(newVote);
+    const response = await connection.save(newVote);
     return response;
   }
 
-  async getCommentByTeacher(id: number) {
+  static async getCommentByTeacher(id: number) {
+
+    const connection = (await typeormConnection).getRepository(Vote);
     let teacher = new Teacher();
     teacher.id = id;
 
-    const response = await this.connection.find({
+    const response = await connection.find({
       teacher: teacher,
     });
     return response;
   }
 
-  async getVotesByTeacher(teacher: Teacher, vote: boolean) {
-    const response = await this.connection.find({
+  static async getVotesByTeacher(teacher: Teacher, vote: boolean) {
+    
+    const connection = (await typeormConnection).getRepository(Vote);
+    const response = await connection.find({
       teacher: teacher,
       vote: vote,
     });

@@ -1,45 +1,38 @@
 import typeormConnection from "../Libs/typeorm";
-import SchoolService from "./SchoolService";
-import SubjectService from "./SubjectService";
-import { Like, Repository } from "typeorm";
-import Teacher from "../Entity/Teacher";
-import VoteService from "./VoteService";
+import { Like } from "typeorm";
 import { TokenPayload, verifyToken } from "../Utils/token";
 
+//ENTITES
+import Teacher from "../Entity/Teacher";
+
+//SERVICES
+import VoteService from "./VoteService";
+import SchoolService from "./SchoolService";
+import SubjectService from "./SubjectService";
+
 class TeacherService {
-  connection: Repository<Teacher>;
-  schoolService: SchoolService;
-  subjectService: SubjectService;
-  voteService: VoteService;
 
-  constructor() {
-    typeormConnection
-      .then((c) => (this.connection = c.getRepository(Teacher)))
-      .catch((e) => console.error(e));
-    this.schoolService = new SchoolService();
-    this.subjectService = new SubjectService();
-    this.voteService = new VoteService();
-  }
+  static async searchTeachers(fullname: string) {
 
-  async searchTeachers(fullname: string) {
-
-    const response: Teacher[] = await this.connection.find(
+    const connection = (await typeormConnection).getRepository(Teacher);
+    const response: Teacher[] = await connection.find(
       { fullname: Like(`%${fullname}%`) }
     );
 
     for (let i = 0; i < response.length; i++) {
-      response[i].subjects = await this.subjectService.getSubjectByTeacher(response[i].id);
-      response[i].schools = await this.schoolService.getSchoolByTeacher(response[i].id);
+      response[i].subjects = await SubjectService.getSubjectByTeacher(response[i].id);
+      response[i].schools = await SchoolService.getSchoolByTeacher(response[i].id);
     }
     return response;
   }
 
-  async getAllTeachers(req: any) {
+  static async getAllTeachers(req: any) {
 
+    const connection = (await typeormConnection).getRepository(Teacher);
     const token: string = req.headers.authorization.split(" ")[1];
     const tokenPayload: TokenPayload = verifyToken(token);
 
-    const response: Teacher[] = await this.connection.query(
+    const response: Teacher[] = await connection.query(
       `SELECT 
         t.*
       FROM teacher t
@@ -49,23 +42,25 @@ class TeacherService {
     );
 
     for (let i = 0; i < response.length; i++) {
-      response[i].subjects = await this.subjectService.getSubjectByTeacher(response[i].id);
-      response[i].schools = await this.schoolService.getSchoolByTeacher(response[i].id);
+      response[i].subjects = await SubjectService.getSubjectByTeacher(response[i].id);
+      response[i].schools = await SchoolService.getSchoolByTeacher(response[i].id);
     }
     return response;
   }
 
-  async getTeacherInfo(id: number) {
-    const response: Teacher = await this.connection.findOne(
+  static async getTeacherInfo(id: number) {
+
+    const connection = (await typeormConnection).getRepository(Teacher);
+    const response: Teacher = await connection.findOne(
       { id: id },
       { relations: ["votes"] }
     );
     if (response) {
-      response.positiveVotes = await this.voteService.getVotesByTeacher(
+      response.positiveVotes = await VoteService.getVotesByTeacher(
         response,
         true
       );
-      response.negativeVotes = await this.voteService.getVotesByTeacher(
+      response.negativeVotes = await VoteService.getVotesByTeacher(
         response,
         false
       );

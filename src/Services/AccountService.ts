@@ -1,24 +1,23 @@
 import typeormConnection from "../Libs/typeorm";
-import { Repository } from "typeorm";
 import bycrypt from "bcrypt";
-
-import Account from "../Entity/Account";
 import { signToken } from "../Utils/token";
+
+//ENTITIES
+import Account from "../Entity/Account";
+import Users from "../Entity/Users";
+
+//DTOs
 import LoginRequestDTO from "../Entity/DTOs/login/LoginRequestDTO";
 import LoginResponseDTO from "../Entity/DTOs/login/LoginResponseDTO";
-import Users from "../Entity/Users";
+
+//SERVICES
 import UsersService from "./UsersService";
 
 class AccountService {
-    connection: Repository<Account>;
-    constructor() {
-        typeormConnection
-            .then((c) => (this.connection = c.getRepository(Account)))
-            .catch((e) => console.error(e));
-    }
 
-    async login(loginInfo: LoginRequestDTO) {
-        const account: Account = await this.connection.findOne({ username: loginInfo.username });
+    static async login(loginInfo: LoginRequestDTO) {
+        const connection = (await typeormConnection).getRepository(Account);
+        const account: Account = await connection.findOne({ username: loginInfo.username });
         if (account && bycrypt.compareSync(loginInfo.password, account.password)) {
             const user: Users = await UsersService.getByAccount(account);
             let response: LoginResponseDTO = {
@@ -33,8 +32,9 @@ class AccountService {
         }
     }
 
-    async createAccount(newAccount: Account) {
-        const response = await this.connection.save(newAccount);
+    static async createAccount(newAccount: Account) {
+        const connection = (await typeormConnection).getRepository(Account);
+        const response = await connection.save(newAccount);
         return response;
     }
 }

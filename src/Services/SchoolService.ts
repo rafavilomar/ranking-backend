@@ -1,18 +1,11 @@
 import School from "../Entity/School";
 import typeormConnection from "../Libs/typeorm";
-import { Repository } from "typeorm";
 
 class SchoolService {
-
-  connection: Repository<School>;
-  constructor() {
-    typeormConnection
-      .then((c) => (this.connection = c.getRepository(School)))
-      .catch((e) => console.error(e));
-  }
   
-  async getSchoolByTeacher(teacherId: number) {
-    const response = await this.connection.query(
+  static async getSchoolByTeacher(teacherId: number) {
+    const connection = (await typeormConnection).getRepository(School);
+    const response = await connection.query(
       `SELECT 
         s.id,
         s.name
