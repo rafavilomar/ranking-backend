@@ -16,6 +16,11 @@ class TeacherController {
     let response = await this.teacherService.getTeacherInfo(id);
     return response;
   }
+  
+  async searchTeachers(fullname: string) {
+    let response = await this.teacherService.searchTeachers(fullname);
+    return response;
+  }
 }
 
 export default TeacherController;

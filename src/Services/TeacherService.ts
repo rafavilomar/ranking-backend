@@ -1,7 +1,7 @@
 import typeormConnection from "../Libs/typeorm";
 import SchoolService from "./SchoolService";
 import SubjectService from "./SubjectService";
-import { Repository } from "typeorm";
+import { Like, Repository } from "typeorm";
 import Teacher from "../Entity/Teacher";
 import VoteService from "./VoteService";
 
@@ -20,7 +20,21 @@ class TeacherService {
     this.voteService = new VoteService();
   }
 
+  async searchTeachers(fullname: string) {
+
+    const response: Teacher[] = await this.connection.find(
+      { fullname: Like(`%${fullname}%`) }
+    );
+
+    for (let i = 0; i < response.length; i++) {
+      response[i].subjects = await this.subjectService.getSubjectByTeacher(response[i].id);
+      response[i].schools = await this.schoolService.getSchoolByTeacher(response[i].id);
+    }
+    return response;
+  }
+
   async getAllTeachers() {
+
     const response: Teacher[] = await this.connection.query(
       `SELECT 
         t.*
