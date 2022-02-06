@@ -10,8 +10,14 @@ import VoteRequestDTO from "../Entity/DTOs/vote/VoteRequestDTO";
 
 class VoteService {
 
+  static async getFullById(id: number) {
+    const connection = (await typeormConnection).getRepository(Vote);
+    const response = await connection.findOne(id, { relations: ["teacher", "users"] });
+    return response;
+  }
+
   static async makeVote(vote: VoteRequestDTO) {
-    
+
     const connection = (await typeormConnection).getRepository(Vote);
     let teacher = new Teacher();
     teacher.id = vote.teacherId;
@@ -42,7 +48,7 @@ class VoteService {
   }
 
   static async getVotesByTeacher(teacher: Teacher, vote: boolean) {
-    
+
     const connection = (await typeormConnection).getRepository(Vote);
     const response = await connection.find({
       teacher: teacher,
