@@ -4,6 +4,7 @@ import { TokenPayload, verifyToken } from "../Utils/token";
 
 //ENTITES
 import Teacher from "../Entity/Teacher";
+import Vote from "../Entity/Vote";
 
 //SERVICES
 import VoteService from "./VoteService";
@@ -56,10 +57,22 @@ class TeacherService {
       { relations: ["votes"] }
     );
     if (response) {
+
+      response.subjects = await SubjectService.getSubjectByTeacher(response.id);
+      response.schools = await SchoolService.getSchoolByTeacher(response.id);
+
+      let voteList: Vote[] = [];
+      for (let i = 0; i < response.votes.length; i++) {
+        const vote = await VoteService.getFullById(response.votes[i].id);
+        voteList.push(vote);
+      }
+      response.votes = voteList;
+
       response.positiveVotes = await VoteService.getVotesByTeacher(
         response,
         true
       );
+
       response.negativeVotes = await VoteService.getVotesByTeacher(
         response,
         false

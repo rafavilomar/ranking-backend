@@ -37,5 +37,12 @@ class AccountService {
         const response = await connection.save(newAccount);
         return response;
     }
+
+    static async getByUser(user: Users) {
+        const connection = (await typeormConnection).getRepository(Account);
+        const response = await connection.findOne({ user: user }, { relations: ["user"] });
+
+        return response;
+    }
 }
 export default AccountService;

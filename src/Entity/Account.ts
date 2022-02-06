@@ -1,4 +1,5 @@
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, OneToOne, PrimaryGeneratedColumn } from "typeorm";
+import Users from "./Users";
 
 @Entity()
 export default class Account {
@@ -13,4 +14,7 @@ export default class Account {
 
   @Column({ nullable: false })
   timestamp: Date = new Date();
+
+  @OneToOne(() => Users, user => user.idAccount)
+  user: Users;
 }

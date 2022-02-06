@@ -7,12 +7,14 @@ import Vote from "../Entity/Vote";
 
 //DTOs
 import VoteRequestDTO from "../Entity/DTOs/vote/VoteRequestDTO";
+import AccountService from "./AccountService";
 
 class VoteService {
 
   static async getFullById(id: number) {
     const connection = (await typeormConnection).getRepository(Vote);
     const response = await connection.findOne(id, { relations: ["teacher", "users"] });
+    response.users.idAccount = await AccountService.getByUser(response.users);
     return response;
   }
 
