@@ -39,21 +39,23 @@ export const validateToken = () => {
 
 export const refreshToken = (token: string) => {
 
-    const tokenInfo = token.split(" ")[1];
-    const tokenPayload = jwt.decode(tokenInfo) as TokenPayload;
-    let nowInMinutes = Date.now() / 1000 / 60;
-    let expireInMinutes = (tokenPayload.exp / 60) - nowInMinutes;
+    if (token.split(" ").length > 1) {
+        const tokenInfo = token.split(" ")[1];
+        const tokenPayload = jwt.decode(tokenInfo) as TokenPayload;
+        let nowInMinutes = Date.now() / 1000 / 60;
+        let expireInMinutes = (tokenPayload.exp / 60) - nowInMinutes;
 
-    if (expireInMinutes <= 20 || expireInMinutes <= -20) {
-        const expirationTime = config.api.time * 60 * 60;
-        const newPayload: TokenPayload = {
-            id: tokenPayload.id,
-            sub: tokenPayload.sub
+        if (expireInMinutes <= 20 || expireInMinutes <= -20) {
+            const expirationTime = config.api.time * 60 * 60;
+            const newPayload: TokenPayload = {
+                id: tokenPayload.id,
+                sub: tokenPayload.sub
+            }
+            return jwt.sign(newPayload, config.api.secret, { expiresIn: expirationTime });
         }
-        return jwt.sign(newPayload, config.api.secret, { expiresIn: expirationTime });
+        return tokenInfo;
     }
 
-    return tokenInfo;
 }
 
 passport.use(validateToken())
