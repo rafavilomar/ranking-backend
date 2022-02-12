@@ -58,5 +58,20 @@ class VoteService {
     });
     return response.length;
   }
+
+  static async checkVote(idTeacher: number, idUser: number) {
+
+    const connection = (await typeormConnection).getRepository(Vote);
+    let result: boolean = false;
+
+    const response = await connection.find({
+      teacher: { id: idTeacher },
+      users: { id: idUser }
+    })
+    response.length > 0 && (result = true);
+
+    return result;
+
+  }
 }
 export default VoteService;
