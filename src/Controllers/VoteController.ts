@@ -15,5 +15,10 @@ class CommentController {
     let response = VoteService.makeVote(vote);
     return response;
   }
+
+  static async checkVote(idTeacher: number, idUser: number) {
+    let response = VoteService.checkVote(idTeacher, idUser);
+    return response;
+  }
 }
 export default CommentController;
