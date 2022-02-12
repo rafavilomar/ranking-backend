@@ -25,7 +25,7 @@ export const signToken = (account: Account, user: Users) => {
 }
 
 export const verifyToken = (token: string) => {
-    const tokenPayload:  TokenPayload = jwt.verify(token, config.api.secret) as TokenPayload; 
+    const tokenPayload: TokenPayload = jwt.verify(token, config.api.secret) as TokenPayload;
     return tokenPayload;
 }
 
@@ -35,6 +35,24 @@ export const validateToken = () => {
         secretOrKey: config.api.secret
     }
     return new Strategy(options, (payload, done) => { return done(null, payload) })
+}
+
+export const refreshToken = (token: string) => {
+
+    const tokenPayload = jwt.decode(token) as TokenPayload;
+    let nowInMinutes = Date.now() / 1000 / 60;
+    let expireInMinutes = (tokenPayload.exp / 60) - nowInMinutes;
+
+    if (expireInMinutes <= 20 || expireInMinutes <= -20) {
+        const expirationTime = config.api.time * 60 * 60;
+        const newPayload: TokenPayload = {
+            id: tokenPayload.id,
+            sub: tokenPayload.sub
+        }
+        return jwt.sign(newPayload, config.api.secret, { expiresIn: expirationTime });
+    }
+
+    return token
 }
 
 passport.use(validateToken())
