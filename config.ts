@@ -3,7 +3,7 @@ import {config as envConfig} from "dotenv";
 envConfig()
 const config = {
   api: {
-    port: process.env.API_PORT || '',
+    port: process.env.PORT || '',
     secret: process.env.JWT_SECRET || '',
     time: parseInt(process.env.JWT_HOURS) || parseInt("")
   },
