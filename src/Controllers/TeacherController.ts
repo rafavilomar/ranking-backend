@@ -1,19 +1,19 @@
 import TeacherService from "../Services/TeacherService";
 
 class TeacherController {
-  teacherService: TeacherService;
 
-  constructor() {
-    this.teacherService = new TeacherService();
-  }
-
-  async getAllTeachers() {
-    let response = await this.teacherService.getAllTeachers();
+  static async getAllTeachers(req: any) {
+    let response = await TeacherService.getAllTeachers(req);
     return response;
   }
 
-  async getTeacherInfo() {
-    let response = await this.teacherService.getTeacherInfo();
+  static async getTeacherInfo(id: number) {
+    let response = await TeacherService.getTeacherInfo(id);
+    return response;
+  }
+
+  static async searchTeachers(fullname: string) {
+    let response = await TeacherService.searchTeachers(fullname);
     return response;
   }
 }

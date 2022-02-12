@@ -1,37 +1,77 @@
-import { Pool } from "pg";
-import pool from "../Libs/postgres.pool";
+import typeormConnection from "../Libs/typeorm";
+
+//ENTITIES
+import Teacher from "../Entity/Teacher";
+import Users from "../Entity/Users";
+import Vote from "../Entity/Vote";
+
+//DTOs
+import VoteRequestDTO from "../Entity/DTOs/vote/VoteRequestDTO";
+import AccountService from "./AccountService";
 
 class VoteService {
 
-  connection: Pool;
-  constructor() {
-    this.connection = pool
+  static async getFullById(id: number) {
+    const connection = (await typeormConnection).getRepository(Vote);
+    const response = await connection.findOne(id, { relations: ["teacher", "users"] });
+    response.users.idAccount = await AccountService.getByUser(response.users);
+    return response;
   }
 
-  async makeVote() {
-    const response = await this.connection.query(
-      `INSERT INTO vote (idteacher, idusers, vote, comment, timestamp)
-      VALUES (1,1,true,'Excelente profesor!!.', CURRENT_DATE);`
-    )
-    return response.rows;
+  static async makeVote(vote: VoteRequestDTO) {
+
+    const connection = (await typeormConnection).getRepository(Vote);
+    let teacher = new Teacher();
+    teacher.id = vote.teacherId;
+
+    let user = new Users();
+    user.id = vote.usersId;
+
+    let newVote = new Vote;
+    newVote.teacher = teacher;
+    newVote.users = user;
+    newVote.vote = vote.vote;
+    newVote.comment = vote.comment;
+
+    const response = await connection.save(newVote);
+    return response;
   }
 
-  async getCommentByTeacher(){
-    const response = await this.connection.query(
-      `SELECT 
-        v.id,
-        v.vote,
-        v.comment,
-        v.timestamp,
-        a.username,
-        u.img
-      FROM vote v
-      INNER JOIN users u ON v.idusers = u.id
-      INNER JOIN account a ON u.idaccount = a.id
-      WHERE v.idteacher = 1;`
-    );
+  static async getCommentByTeacher(id: number) {
 
-    return response.rows;
+    const connection = (await typeormConnection).getRepository(Vote);
+    let teacher = new Teacher();
+    teacher.id = id;
+
+    const response = await connection.find({
+      teacher: teacher,
+    });
+    return response;
+  }
+
+  static async getVotesByTeacher(teacher: Teacher, vote: boolean) {
+
+    const connection = (await typeormConnection).getRepository(Vote);
+    const response = await connection.find({
+      teacher: teacher,
+      vote: vote,
+    });
+    return response.length;
+  }
+
+  static async checkVote(idTeacher: number, idUser: number) {
+
+    const connection = (await typeormConnection).getRepository(Vote);
+    let result: boolean = false;
+
+    const response = await connection.find({
+      teacher: { id: idTeacher },
+      users: { id: idUser }
+    })
+    response.length > 0 && (result = true);
+
+    return result;
+
   }
 }
 export default VoteService;
