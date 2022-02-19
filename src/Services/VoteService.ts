@@ -10,16 +10,16 @@ import VoteRequestDTO from "../Entity/DTOs/vote/VoteRequestDTO";
 import AccountService from "./AccountService";
 
 class VoteService {
-
   static async getFullById(id: number) {
     const connection = (await typeormConnection).getRepository(Vote);
-    const response = await connection.findOne(id, { relations: ["teacher", "users"] });
+    const response = await connection.findOne(id, {
+      relations: ["teacher", "users"],
+    });
     response.users.idAccount = await AccountService.getByUser(response.users);
     return response;
   }
 
   static async makeVote(vote: VoteRequestDTO) {
-
     const connection = (await typeormConnection).getRepository(Vote);
     let teacher = new Teacher();
     teacher.id = vote.teacherId;
@@ -27,7 +27,7 @@ class VoteService {
     let user = new Users();
     user.id = vote.usersId;
 
-    let newVote = new Vote;
+    let newVote = new Vote();
     newVote.teacher = teacher;
     newVote.users = user;
     newVote.vote = vote.vote;
@@ -38,7 +38,6 @@ class VoteService {
   }
 
   static async getCommentByTeacher(id: number) {
-
     const connection = (await typeormConnection).getRepository(Vote);
     let teacher = new Teacher();
     teacher.id = id;
@@ -50,7 +49,6 @@ class VoteService {
   }
 
   static async getVotesByTeacher(teacher: Teacher, vote: boolean) {
-
     const connection = (await typeormConnection).getRepository(Vote);
     const response = await connection.find({
       teacher: teacher,
@@ -60,18 +58,16 @@ class VoteService {
   }
 
   static async checkVote(idTeacher: number, idUser: number) {
-
     const connection = (await typeormConnection).getRepository(Vote);
     let result: boolean = false;
 
     const response = await connection.find({
       teacher: { id: idTeacher },
-      users: { id: idUser }
-    })
+      users: { id: idUser },
+    });
     response.length > 0 && (result = true);
 
     return result;
-
   }
 }
 export default VoteService;

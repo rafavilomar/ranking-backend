@@ -2,7 +2,6 @@ import School from "../Entity/School";
 import typeormConnection from "../Libs/typeorm";
 
 class SchoolService {
-  
   static async getSchoolByTeacher(teacherId: number) {
     const connection = (await typeormConnection).getRepository(School);
     const response = await connection.query(
@@ -17,5 +16,14 @@ class SchoolService {
     return response;
   }
 
+  static async createSchool(school: School) {
+    const connection = (await typeormConnection).getRepository(School);
+    return await connection.save(school);
+  }
+
+  static async getAllSchools() {
+    const connection = (await typeormConnection).getRepository(School);
+    return await connection.find();
+  }
 }
 export default SchoolService;

@@ -12,23 +12,24 @@ import SchoolService from "./SchoolService";
 import SubjectService from "./SubjectService";
 
 class TeacherService {
-
   static async searchTeachers(fullname: string) {
-
     const connection = (await typeormConnection).getRepository(Teacher);
-    const response: Teacher[] = await connection.find(
-      { fullname: Like(`%${fullname}%`) }
-    );
+    const response: Teacher[] = await connection.find({
+      fullname: Like(`%${fullname}%`),
+    });
 
     for (let i = 0; i < response.length; i++) {
-      response[i].subjects = await SubjectService.getSubjectByTeacher(response[i].id);
-      response[i].schools = await SchoolService.getSchoolByTeacher(response[i].id);
+      response[i].subjects = await SubjectService.getSubjectByTeacher(
+        response[i].id
+      );
+      response[i].schools = await SchoolService.getSchoolByTeacher(
+        response[i].id
+      );
     }
     return response;
   }
 
   static async getAllTeachers(req: any) {
-
     const connection = (await typeormConnection).getRepository(Teacher);
     const token: string = req.headers.authorization.split(" ")[1];
     const tokenPayload: TokenPayload = verifyToken(token);
@@ -43,21 +44,23 @@ class TeacherService {
     );
 
     for (let i = 0; i < response.length; i++) {
-      response[i].subjects = await SubjectService.getSubjectByTeacher(response[i].id);
-      response[i].schools = await SchoolService.getSchoolByTeacher(response[i].id);
+      response[i].subjects = await SubjectService.getSubjectByTeacher(
+        response[i].id
+      );
+      response[i].schools = await SchoolService.getSchoolByTeacher(
+        response[i].id
+      );
     }
     return response;
   }
 
   static async getTeacherInfo(id: number) {
-
     const connection = (await typeormConnection).getRepository(Teacher);
     const response: Teacher = await connection.findOne(
       { id: id },
       { relations: ["votes"] }
     );
     if (response) {
-
       response.subjects = await SubjectService.getSubjectByTeacher(response.id);
       response.schools = await SchoolService.getSchoolByTeacher(response.id);
 
@@ -79,6 +82,21 @@ class TeacherService {
       );
     }
 
+    return response;
+  }
+
+  static async createTeacher(teacher: Teacher) {
+    const connection = (await typeormConnection).getRepository(Teacher);
+    return await connection.save(teacher);
+  }
+
+  static async getTeachers() {
+    console.log("test");
+    
+    const connection = (await typeormConnection).getRepository(Teacher);
+    const response = await connection.find();
+    console.log(response);
+    
     return response;
   }
 }

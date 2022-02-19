@@ -18,7 +18,7 @@ export default class Users {
   @Column({ length: 64, nullable: false, unique: true })
   email: string;
 
-  @Column({ nullable: true })
+  @Column({ type: "longblob", nullable: true })
   img?: string;
 
   @OneToOne(() => Account, idAccount => idAccount.user, { nullable: false })
