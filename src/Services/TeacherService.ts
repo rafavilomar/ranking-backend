@@ -91,13 +91,21 @@ class TeacherService {
   }
 
   static async getTeachers() {
-    console.log("test");
-    
     const connection = (await typeormConnection).getRepository(Teacher);
-    const response = await connection.find();
-    console.log(response);
-    
-    return response;
+    return await connection.find();
+  }
+
+  static async getRandomTeacher() {
+    const connection = (await typeormConnection).getRepository(Teacher);
+    const response: Teacher[] = await connection
+      .createQueryBuilder()
+      .select("*")
+      .from(Teacher, "teacher")
+      .orderBy("RAND()")
+      .limit(1)
+      .execute();
+      
+    return response[0];
   }
 }
 export default TeacherService;

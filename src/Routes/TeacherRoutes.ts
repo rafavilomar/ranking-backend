@@ -5,9 +5,10 @@ const router = express.Router();
 
 router.get("/", getAllTeachers);
 router.post("/", createTeacher);
+router.get("/getTeachers", getTeachers);
+router.get("/getRandom", getRandomTeacher);
 router.get("/:id", getTeacherInfo);
 router.get("/search/:fullname", searchTeachers);
-router.get("/getTeachers", getTeachers);
 
 async function getAllTeachers(req: any, res: any) {
   let response = await TeacherController.getAllTeachers(req);
@@ -31,6 +32,11 @@ async function createTeacher(req: any, res: any) {
 
 async function getTeachers(req: any, res: any) {
   let response = await TeacherController.getTeachers();
+  res.json(response);
+}
+
+async function getRandomTeacher(req: any, res: any) {
+  let response = await TeacherController.getRandomTeacher();
   res.json(response);
 }
 
