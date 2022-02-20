@@ -3,12 +3,12 @@ import SchoolService from "../Services/SchoolService";
 
 class SchoolController {
   static async createSchool(school: School) {
-    let response = await SchoolService.createSchool(school);
+    const response = await SchoolService.createSchool(school);
     return response;
   }
 
   static async getAllSchools() {
-    let response = await SchoolService.getAllSchools();
+    const response = await SchoolService.getAllSchools();
     return response;
   }
 }

@@ -1,49 +1,47 @@
-import typeormConnection from "../Libs/typeorm";
 import bycrypt from "bcrypt";
+import typeormConnection from "../Libs/typeorm";
 
-//ENTITIES
+// ENTITIES
 import Users from "../Entity/Users";
 import UsersDTO from "../Entity/DTOs/UsersDTO";
 import Account from "../Entity/Account";
 import Vote from "../Entity/Vote";
 
-//SERVICES
+// SERVICES
 import AccountService from "./AccountService";
 import VoteService from "./VoteService";
 
 class UsersService {
-
   static async getUserInfo() {
-
     const connection = (await typeormConnection).getRepository(Users);
     const response: Users = await connection.findOne(1, {
       relations: ["votes"],
     });
 
-    let voteList: Vote[] = [];
+    const voteList: Vote[] = [];
     for (let i = 0; i < response.votes.length; i++) {
       const vote = await VoteService.getFullById(response.votes[i].id);
       voteList.push(vote);
     }
-    
+
     response.votes = voteList;
     return response;
   }
 
   static async createUser(newUser: UsersDTO) {
-
     const connection = (await typeormConnection).getRepository(Users);
     try {
-      let account = new Account();
+      const account = new Account();
       account.username = newUser.username;
       account.password = bycrypt.hashSync(newUser.password, 10);
-      const accountCreated: Account = await AccountService.createAccount(account);
+      const accountCreated: Account = await AccountService.createAccount(
+        account
+      );
 
-      let user = new Users();
+      const user = new Users();
       user.email = newUser.email;
       user.idAccount = accountCreated;
-      const userCreated: Users = await connection.save(user);
-
+      await connection.save(user);
     } catch (error) {
       console.error(error);
       throw new Error("Can't create a new Account");

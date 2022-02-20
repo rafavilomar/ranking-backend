@@ -18,12 +18,12 @@ class SchoolService {
 
   static async createSchool(school: School) {
     const connection = (await typeormConnection).getRepository(School);
-    return await connection.save(school);
+    return connection.save(school);
   }
 
   static async getAllSchools() {
     const connection = (await typeormConnection).getRepository(School);
-    return await connection.find();
+    return connection.find();
   }
 }
 export default SchoolService;

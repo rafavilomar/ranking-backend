@@ -1,13 +1,12 @@
 import express from "express";
 import UsersController from "../Controllers/UsersController";
 
-const router = express.Router();
-
-router.get("/:id", getUserInfo);
-
 async function getUserInfo(req: any, res: any) {
-  let response = await UsersController.getUserInfo();
+  const response = await UsersController.getUserInfo();
   res.json(response);
 }
+
+const router = express.Router();
+router.get("/:id", getUserInfo);
 
 export default router;

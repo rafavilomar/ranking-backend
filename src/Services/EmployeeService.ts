@@ -1,17 +1,17 @@
 import typeormConnection from "../Libs/typeorm";
 
-//ENTITES
+// ENTITES
 import Employee from "../Entity/Employee";
 
 class EmployeeService {
   static async createEmployee(employee: Employee) {
     const connection = (await typeormConnection).getRepository(Employee);
-    return await connection.save(employee);
+    return connection.save(employee);
   }
 
   static async getAllEmployees() {
     const connection = (await typeormConnection).getRepository(Employee);
-    return await connection.find();
+    return connection.find();
   }
 }
 export default EmployeeService;

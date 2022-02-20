@@ -1,12 +1,12 @@
-import typeormConnection from "../Libs/typeorm";
 import { Like } from "typeorm";
+import typeormConnection from "../Libs/typeorm";
 import { TokenPayload, verifyToken } from "../Utils/token";
 
-//ENTITES
+// ENTITES
 import Teacher from "../Entity/Teacher";
 import Vote from "../Entity/Vote";
 
-//SERVICES
+// SERVICES
 import VoteService from "./VoteService";
 import SchoolService from "./SchoolService";
 import SubjectService from "./SubjectService";
@@ -57,14 +57,14 @@ class TeacherService {
   static async getTeacherInfo(id: number) {
     const connection = (await typeormConnection).getRepository(Teacher);
     const response: Teacher = await connection.findOne(
-      { id: id },
+      { id },
       { relations: ["votes"] }
     );
     if (response) {
       response.subjects = await SubjectService.getSubjectByTeacher(response.id);
       response.schools = await SchoolService.getSchoolByTeacher(response.id);
 
-      let voteList: Vote[] = [];
+      const voteList: Vote[] = [];
       for (let i = 0; i < response.votes.length; i++) {
         const vote = await VoteService.getFullById(response.votes[i].id);
         voteList.push(vote);
@@ -87,12 +87,12 @@ class TeacherService {
 
   static async createTeacher(teacher: Teacher) {
     const connection = (await typeormConnection).getRepository(Teacher);
-    return await connection.save(teacher);
+    return connection.save(teacher);
   }
 
   static async getTeachers() {
     const connection = (await typeormConnection).getRepository(Teacher);
-    return await connection.find();
+    return connection.find();
   }
 
   static async getRandomTeacher() {
@@ -104,7 +104,7 @@ class TeacherService {
       .orderBy("RAND()")
       .limit(1)
       .execute();
-      
+
     return response[0];
   }
 }

@@ -1,11 +1,11 @@
 import typeormConnection from "../Libs/typeorm";
 
-//ENTITIES
+// ENTITIES
 import Teacher from "../Entity/Teacher";
 import Users from "../Entity/Users";
 import Vote from "../Entity/Vote";
 
-//DTOs
+// DTOs
 import VoteRequestDTO from "../Entity/DTOs/vote/VoteRequestDTO";
 import AccountService from "./AccountService";
 
@@ -21,13 +21,13 @@ class VoteService {
 
   static async makeVote(vote: VoteRequestDTO) {
     const connection = (await typeormConnection).getRepository(Vote);
-    let teacher = new Teacher();
+    const teacher = new Teacher();
     teacher.id = vote.teacherId;
 
-    let user = new Users();
+    const user = new Users();
     user.id = vote.usersId;
 
-    let newVote = new Vote();
+    const newVote = new Vote();
     newVote.teacher = teacher;
     newVote.users = user;
     newVote.vote = vote.vote;
@@ -39,11 +39,11 @@ class VoteService {
 
   static async getCommentByTeacher(id: number) {
     const connection = (await typeormConnection).getRepository(Vote);
-    let teacher = new Teacher();
+    const teacher = new Teacher();
     teacher.id = id;
 
     const response = await connection.find({
-      teacher: teacher,
+      teacher,
     });
     return response;
   }
@@ -51,8 +51,8 @@ class VoteService {
   static async getVotesByTeacher(teacher: Teacher, vote: boolean) {
     const connection = (await typeormConnection).getRepository(Vote);
     const response = await connection.find({
-      teacher: teacher,
-      vote: vote,
+      teacher,
+      vote,
     });
     return response.length;
   }
@@ -65,7 +65,9 @@ class VoteService {
       teacher: { id: idTeacher },
       users: { id: idUser },
     });
-    response.length > 0 && (result = true);
+    if (response.length > 0) {
+      result = true;
+    }
 
     return result;
   }

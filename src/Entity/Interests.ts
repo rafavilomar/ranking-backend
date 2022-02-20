@@ -14,11 +14,11 @@ export default class Interests {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @ManyToOne((type) => Users, (user) => user.id, { nullable: false })
+  @ManyToOne(() => Users, (user) => user.id, { nullable: false })
   @JoinColumn()
   users: Users;
 
-  @ManyToOne((type) => School, (school) => school.id, { nullable: false })
+  @ManyToOne(() => School, (school) => school.id, { nullable: false })
   @JoinColumn()
   school: School;
 }

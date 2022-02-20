@@ -21,7 +21,7 @@ export default class Users {
   @Column({ type: "longblob", nullable: true })
   img?: string;
 
-  @OneToOne(() => Account, idAccount => idAccount.user, { nullable: false })
+  @OneToOne(() => Account, (idAccount) => idAccount.user, { nullable: false })
   @JoinColumn()
   idAccount: Account;
 

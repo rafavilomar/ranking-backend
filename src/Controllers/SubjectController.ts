@@ -3,12 +3,12 @@ import SubjectService from "../Services/SubjectService";
 
 class SubjectController {
   static async createSubject(subject: Subject) {
-    let response = await SubjectService.createSubject(subject);
+    const response = await SubjectService.createSubject(subject);
     return response;
   }
 
   static async getAllSubjects() {
-    let response = await SubjectService.getAllSubjects();
+    const response = await SubjectService.getAllSubjects();
     return response;
   }
 }

@@ -1,6 +1,6 @@
 import typeormConnection from "../Libs/typeorm";
 
-//ENTITES
+// ENTITES
 import Subject from "../Entity/Subject";
 
 class SubjectService {
@@ -19,12 +19,12 @@ class SubjectService {
 
   static async createSubject(subject: Subject) {
     const connection = (await typeormConnection).getRepository(Subject);
-    return await connection.save(subject);
+    return connection.save(subject);
   }
 
   static async getAllSubjects() {
     const connection = (await typeormConnection).getRepository(Subject);
-    return await connection.find();
+    return connection.find();
   }
 }
 export default SubjectService;
