@@ -9,6 +9,6 @@ export default class Subject {
   @Column({ length: 64, unique: true, nullable: false })
   name: string;
 
-  @OneToMany((type) => Employee, (employee) => employee.subject)
+  @OneToMany(() => Employee, (employee) => employee.subject)
   employees: Employee[];
 }

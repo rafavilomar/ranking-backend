@@ -13,9 +13,9 @@ export default class School {
   @Column({ length: 30, unique: true })
   category: string;
 
-  @OneToMany((type) => Interests, (interest) => interest.school)
+  @OneToMany(() => Interests, (interest) => interest.school)
   interests: Interests[];
 
-  @OneToMany((type) => Employee, (employee) => employee.school)
+  @OneToMany(() => Employee, (employee) => employee.school)
   employees: Employee[];
 }

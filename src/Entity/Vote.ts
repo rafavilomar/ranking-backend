@@ -24,11 +24,11 @@ export default class Vote {
   @Column({ nullable: false })
   timestamp: Date = new Date();
 
-  @ManyToOne((type) => Teacher, (teacher) => teacher.id, { nullable: false })
+  @ManyToOne(() => Teacher, (teacher) => teacher.id, { nullable: false })
   @JoinColumn()
   teacher: Teacher;
 
-  @ManyToOne((type) => Users, (user) => user.id, { nullable: false })
+  @ManyToOne(() => Users, (user) => user.id, { nullable: false })
   @JoinColumn()
   users: Users;
 }

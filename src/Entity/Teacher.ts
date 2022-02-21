@@ -21,14 +21,17 @@ export default class Teacher extends BaseEntity {
   @Column({ nullable: true })
   img?: string;
 
-  @OneToMany((type) => Vote, (vote) => vote.teacher)
+  @OneToMany(() => Vote, (vote) => vote.teacher)
   votes: Vote[];
 
-  @OneToMany((type) => Employee, (employee) => employee.teacher)
+  @OneToMany(() => Employee, (employee) => employee.teacher)
   employees: Employee[];
 
   positiveVotes?: number;
+
   negativeVotes?: number;
+
   subjects?: Subject[];
+
   schools?: School[];
 }
