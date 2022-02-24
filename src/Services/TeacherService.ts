@@ -107,5 +107,20 @@ class TeacherService {
 
     return response[0];
   }
+
+  static async getTopTeachers() {
+    const connection = (await typeormConnection).getRepository(Teacher);
+    const response: any[] = await connection.query(
+      `SELECT teacher.*, COUNT(vote) as votes 
+      FROM teacher
+      INNER JOIN vote ON vote.teacherId = teacher.id
+      WHERE vote.vote = true
+      GROUP BY vote.teacherId
+      ORDER BY 2
+      LIMIT 3`
+    );
+
+    return response;
+  }
 }
 export default TeacherService;

@@ -31,12 +31,18 @@ async function getRandomTeacher(req: any, res: any) {
   res.json(response);
 }
 
+async function getTopTeachers(req: any, res: any) {
+  const response = await TeacherController.getTopTeachers();
+  res.json(response);
+}
+
 const router = express.Router();
 
 router.get("/", getAllTeachers);
 router.post("/", createTeacher);
 router.get("/getTeachers", getTeachers);
 router.get("/getRandom", getRandomTeacher);
+router.get("/top", getTopTeachers);
 router.get("/:id", getTeacherInfo);
 router.get("/search/:fullname", searchTeachers);
 
