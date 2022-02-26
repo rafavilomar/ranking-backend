@@ -26,16 +26,6 @@ class TeacherController {
     const response = await TeacherService.getTeachers();
     return response;
   }
-
-  static async getRandomTeacher() {
-    const response = await TeacherService.getRandomTeacher();
-    return response;
-  }
-
-  static async getTopTeachers() {
-    const response = await TeacherService.getTopTeachers();
-    return response;
-  }
 }
 
 export default TeacherController;

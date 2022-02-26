@@ -6,6 +6,7 @@ import LoginRequestDTO from "../Entity/DTOs/login/LoginRequestDTO";
 import UsersService from "../Services/UsersService";
 import AccountService from "../Services/AccountService";
 import { refreshToken } from "../Utils/token";
+import TeacherService from "../Services/TeacherService";
 
 class AuthController {
   static async login(loginInfo: LoginRequestDTO) {
@@ -20,6 +21,16 @@ class AuthController {
 
   static async refreshToken(token: string) {
     const response = refreshToken(token);
+    return response;
+  }
+
+  static async getTopTeachers() {
+    const response = await TeacherService.getTopTeachers();
+    return response;
+  }
+
+  static async getRandomTeacher() {
+    const response = await TeacherService.getRandomTeacher();
     return response;
   }
 }
