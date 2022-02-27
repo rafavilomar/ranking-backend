@@ -1,33 +1,33 @@
 import typeormConnection from "../Libs/typeorm";
 
-//ENTITIES
+// ENTITIES
 import Teacher from "../Entity/Teacher";
 import Users from "../Entity/Users";
 import Vote from "../Entity/Vote";
 
-//DTOs
+// DTOs
 import VoteRequestDTO from "../Entity/DTOs/vote/VoteRequestDTO";
 import AccountService from "./AccountService";
 
 class VoteService {
-
   static async getFullById(id: number) {
     const connection = (await typeormConnection).getRepository(Vote);
-    const response = await connection.findOne(id, { relations: ["teacher", "users"] });
+    const response = await connection.findOne(id, {
+      relations: ["teacher", "users"],
+    });
     response.users.idAccount = await AccountService.getByUser(response.users);
     return response;
   }
 
   static async makeVote(vote: VoteRequestDTO) {
-
     const connection = (await typeormConnection).getRepository(Vote);
-    let teacher = new Teacher();
+    const teacher = new Teacher();
     teacher.id = vote.teacherId;
 
-    let user = new Users();
+    const user = new Users();
     user.id = vote.usersId;
 
-    let newVote = new Vote;
+    const newVote = new Vote();
     newVote.teacher = teacher;
     newVote.users = user;
     newVote.vote = vote.vote;
@@ -38,40 +38,38 @@ class VoteService {
   }
 
   static async getCommentByTeacher(id: number) {
-
     const connection = (await typeormConnection).getRepository(Vote);
-    let teacher = new Teacher();
+    const teacher = new Teacher();
     teacher.id = id;
 
     const response = await connection.find({
-      teacher: teacher,
+      teacher,
     });
     return response;
   }
 
   static async getVotesByTeacher(teacher: Teacher, vote: boolean) {
-
     const connection = (await typeormConnection).getRepository(Vote);
     const response = await connection.find({
-      teacher: teacher,
-      vote: vote,
+      teacher,
+      vote,
     });
     return response.length;
   }
 
   static async checkVote(idTeacher: number, idUser: number) {
-
     const connection = (await typeormConnection).getRepository(Vote);
     let result: boolean = false;
 
     const response = await connection.find({
       teacher: { id: idTeacher },
-      users: { id: idUser }
-    })
-    response.length > 0 && (result = true);
+      users: { id: idUser },
+    });
+    if (response.length > 0) {
+      result = true;
+    }
 
     return result;
-
   }
 }
 export default VoteService;

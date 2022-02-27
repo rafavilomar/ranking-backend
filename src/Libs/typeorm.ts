@@ -1,5 +1,5 @@
-import config from "../../config";
 import { createConnection } from "typeorm";
+import config from "../../config";
 
 // ENTITIES
 import Teacher from "../Entity/Teacher";

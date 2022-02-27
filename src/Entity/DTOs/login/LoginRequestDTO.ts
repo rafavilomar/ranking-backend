@@ -1,4 +1,5 @@
 export default class LoginRequestDTO {
-    username: string;
-    password: string;
+  username: string;
+
+  password: string;
 }

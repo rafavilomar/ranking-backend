@@ -7,15 +7,15 @@ export default class School {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ length: 64, nullable: false })
+  @Column({ length: 64, nullable: false, unique: true })
   name: string;
 
-  @Column({ length: 30, unique: true })
+  @Column({ length: 30 })
   category: string;
 
-  @OneToMany((type) => Interests, (interest) => interest.school)
+  @OneToMany(() => Interests, (interest) => interest.school)
   interests: Interests[];
 
-  @OneToMany((type) => Employee, (employee) => employee.school)
+  @OneToMany(() => Employee, (employee) => employee.school)
   employees: Employee[];
 }

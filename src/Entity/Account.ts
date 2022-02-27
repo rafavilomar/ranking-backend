@@ -15,6 +15,6 @@ export default class Account {
   @Column({ nullable: false })
   timestamp: Date = new Date();
 
-  @OneToOne(() => Users, user => user.idAccount)
+  @OneToOne(() => Users, (user) => user.idAccount)
   user: Users;
 }
