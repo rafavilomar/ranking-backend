@@ -7,10 +7,10 @@ export default class School {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ length: 64, nullable: false })
+  @Column({ length: 64, nullable: false, unique: true })
   name: string;
 
-  @Column({ length: 30, unique: true })
+  @Column({ length: 30 })
   category: string;
 
   @OneToMany(() => Interests, (interest) => interest.school)
