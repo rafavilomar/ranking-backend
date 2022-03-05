@@ -2,7 +2,7 @@ import express from "express";
 import UsersController from "../Controllers/UsersController";
 
 async function getUserInfo(req: any, res: any) {
-  const response = await UsersController.getUserInfo();
+  const response = await UsersController.getUserInfo(req.params.id);
   res.json(response);
 }
 

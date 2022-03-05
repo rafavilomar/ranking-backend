@@ -1,8 +1,8 @@
 import UsersService from "../Services/UsersService";
 
 class UsersController {
-  static async getUserInfo() {
-    const response = await UsersService.getUserInfo();
+  static async getUserInfo(id: number) {
+    const response = await UsersService.getUserInfo(id);
     return response;
   }
 }
