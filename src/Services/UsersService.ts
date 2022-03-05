@@ -12,9 +12,9 @@ import AccountService from "./AccountService";
 import VoteService from "./VoteService";
 
 class UsersService {
-  static async getUserInfo() {
+  static async getUserInfo(id: number) {
     const connection = (await typeormConnection).getRepository(Users);
-    const response: Users = await connection.findOne(1, {
+    const response: Users = await connection.findOne(id, {
       relations: ["votes"],
     });
 
